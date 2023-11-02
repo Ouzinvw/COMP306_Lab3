@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>_301229915_Jeffers_vonWahl__Lab3</RootNamespace>
+    <RootNamespace>HuluWeb</RootNamespace>
   </PropertyGroup>
 
 </Project>
