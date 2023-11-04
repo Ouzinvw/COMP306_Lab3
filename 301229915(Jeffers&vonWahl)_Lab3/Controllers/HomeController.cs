@@ -10,20 +10,17 @@ namespace _301229915_Jeffers_vonWahl__Lab3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _userDb;
-        private readonly MovieDbContext _movieDb;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext userDb, MovieDbContext movieDb)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext userDb)
         {
-            _movieDb = movieDb;
             _userDb = userDb;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Movie> movies = _movieDb.Movies;
             IEnumerable<User> users = _userDb.Users;
-            return View(movies);
+            return View(users);
         }
 
         public IActionResult Privacy()

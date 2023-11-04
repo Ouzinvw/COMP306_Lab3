@@ -1,0 +1,38 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = "Create movie";
+}
+
+<form method="post">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-success">Create movie</h2>
+			<hr/>
+		</div>
+		<div class="mb-3 row">
+			<label>Movie title</label>
+			<input asp-for="title" class="form-control"/>
+		</div>
+		<div class="mb-3 row">
+			<label>Movie genre</label>
+			<input asp-for="genre" class="form-control" />
+		</div>
+		<div class="mb-3 row">
+			<label>Movie director</label>
+			<input asp-for="director" class="form-control" />
+		</div>
+		<div class="mb-3 row">
+			<label>Date of release</label>
+			<input asp-for="dateOfRelease" class="form-control" />
+		</div>
+		<div class="row">
+			<div class="col-6 col-md-3">
+				<button type="submit" class="btn btn-success form-control">Create</button>
+			</div>
+			<div class="col-6 col-md-3">
+				<a asp-controller="Movie" asp-action="Index" class="btn btn-outline-dark border form-control">Back to movies</a>
+			</div>
+		</div>
+	</div>
+</form>

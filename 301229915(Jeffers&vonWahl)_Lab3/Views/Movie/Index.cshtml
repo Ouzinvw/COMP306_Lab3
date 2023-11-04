@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Movies";
+}
+<div class="container">
+    <div class="row pt-4 pb-5">
+        <div class="col-6">
+            <h2 class="text-success fw-bold">
+                Movies
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Movie" asp-action="Create" class="btn btn-outline-success">
+                <i class="bi bi-plus"></i> Add movie
+            </a>
+        </div>
+    </div>
+    <hr/>
+    </div>
+    <div class="text-center">
+        <div class="row">
+            <div class="table-responsive">
+                <table id="movieTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>TITLE</th>
+                            <th>GENRE</th>
+                            <th>DIRECTOR</th>
+                            <th>RELEASE DATE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var movie in Model)
+                        {
+                            <tr>
+                                <td>@movie.title</td>
+                                <td>@movie.genre</td>
+                                <td>@movie.director</td>
+                                <td>@movie.dateOfRelease</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
