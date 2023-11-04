@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 // Configuration for RDS UserDB
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connectionString); });
+builder.Services.AddDbContext<MovieDbContext>(options => { options.UseSqlServer(connectionString); });
 
 var app = builder.Build();
 

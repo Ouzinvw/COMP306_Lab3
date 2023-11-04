@@ -6,11 +6,8 @@ namespace HuluWeb.Models
     {
         [Key]
         public int id { get; set; }
-        [Required]
         public string? name { get; set; }
-        [Required]
         public string? username { get; set; }
-        [Required]
         public string? password { get; set; }
     }
 }

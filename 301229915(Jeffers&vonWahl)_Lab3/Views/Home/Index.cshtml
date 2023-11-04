@@ -3,34 +3,31 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Movies</h1>
 
-    <h1>Table of users (just for testing, delete later)</h1>
     <div class="row">
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table id="movieTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>USERNAME</th>
-                        <th>PASSWORD</th>
+                        <th>TITLE</th>
+                        <th>GENRE</th>
+                        <th>DIRECTOR</th>
+                        <th>RELEASE DATE</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Model)
+                    @foreach (var movie in Model)
                     {
                         <tr>
-                            <td>@user.id</td>
-                            <td>@user.name</td>
-                            <td>@user.username</td>
-                            <td>@user.password</td>
+                            <td>@movie.title</td>
+                            <td>@movie.genre</td>
+                            <td>@movie.director</td>
+                            <td>@movie.dateOfRelease</td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
-
 </div>
