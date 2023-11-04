@@ -21,5 +21,14 @@ namespace HuluWeb.Controllers
         {
             return View();
         }
-    }
+
+		[HttpPost]
+        public IActionResult Create(Movie obj)
+		{
+            obj.uploaderId = 1; // TEMPORARY - Add uploaderId retrieval
+            _db.Movies.Add(obj);
+            _db.SaveChanges();
+			return RedirectToAction("Index");
+		}
+	}
 }
