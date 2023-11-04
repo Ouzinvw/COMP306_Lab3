@@ -1,7 +1,14 @@
+using HuluWeb.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configuration for RDS UserDB
+var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connectionString); });
 
 var app = builder.Build();
 
