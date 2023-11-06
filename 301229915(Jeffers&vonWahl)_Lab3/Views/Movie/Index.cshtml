@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Movies";
 }
+<partial name="_Notification" />
 <div class="container">
     <div class="row pt-4 pb-5">
         <div class="col-6">
@@ -56,7 +57,3 @@
             </div>
         </div>
     </div>
-@if (TempData["success"] != null)
-{
-    <h5 class="text-center text-success fw-bold">@TempData["success"]</h5>
-}

@@ -1,0 +1,20 @@
+
+{
+    "region" : "ca-central-1",
+    "configuration" : "Debug",
+    "framework"     : "net6.0",
+    "self-contained" : false,
+    "application"    : "HuluLab3",
+    "environment"    : "HuluLab3-test",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-02172a8d84e18ef1c\";\"aws:ec2:vpc,Subnets\"=\"subnet-06f91795de775eed4\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.6.1 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "hululab3-test",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "keypair_demo",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}
