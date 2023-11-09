@@ -1,19 +1,26 @@
-﻿using HuluWeb.Data;
-using HuluWeb.Models;
+﻿using System.Collections.Generic;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using HuluWeb.Models;
+using Amazon.S3.Transfer;
+using Amazon.S3;
 
 namespace HuluWeb.Controllers
 {
     public class MovieController : Controller
     {
-        private readonly MovieDbContext _db;
-        public MovieController(MovieDbContext db)
+        private readonly IDynamoDBContext _context;
+
+        public MovieController(IAmazonDynamoDB dynamoDBClient)
         {
-            _db = db;
+            _context = new DynamoDBContext(dynamoDBClient);
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            List<Movie> movies = _db.Movies.ToList();
+            var movies = await _context.ScanAsync<Movie>(new List<ScanCondition>()).GetRemainingAsync();
             return View(movies);
         }
 
@@ -22,64 +29,99 @@ namespace HuluWeb.Controllers
             return View();
         }
 
-		[HttpPost]
-        public IActionResult Create(Movie obj)
-		{
-            obj.uploaderId = 1; // TEMPORARY - Add uploaderId retrieval
-            _db.Movies.Add(obj);
-            _db.SaveChanges();
-            TempData["success"] = "Movie created successfully!";
-			return RedirectToAction("Index");
-		}
-
-        public IActionResult Edit(int? id)
+        [HttpPost]
+        public async Task<IActionResult> Create(Movie obj, IFormFile ImageFile)
         {
-            if (id == null || id == 0)
+            
+			if (ImageFile != null && ImageFile.Length > 0)
+			{
+				var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
+
+				using (var client = new AmazonS3Client(YourAWSCredentials, YourS3Config))
+				using (var transferUtility = new TransferUtility(client))
+				{
+					await transferUtility.UploadAsync(ImageFile.OpenReadStream(), YourBucketName, fileName);
+				}
+				obj.imageUrl = $"https://{YourBucketName}.s3.amazonaws.com/{fileName}";
+			}
+
+			obj.id = System.Guid.NewGuid().ToString();
+            obj.uploaderId = 1; // TEMPORARY - Add uploaderId retrieval
+
+            await _context.SaveAsync(obj);
+            TempData["success"] = "Movie created successfully!";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
-            Movie movieFromDb = _db.Movies.Find(id);
+
+            var movieFromDb = await _context.LoadAsync<Movie>(id);
             if (movieFromDb == null)
             {
                 return NotFound();
             }
+
             return View(movieFromDb);
         }
 
+
         [HttpPost]
-        public IActionResult Edit(Movie obj)
+        public async Task<IActionResult> Edit(Movie obj)
         {
-            _db.Movies.Update(obj);
-            _db.SaveChanges();
+            await _context.SaveAsync(obj);
             TempData["success"] = "Movie updated successfully!";
             return RedirectToAction("Index");
         }
 
-		public IActionResult Delete(int? id) 
-		{
-			if (id == null || id == 0)
-			{
-				return NotFound();
-			}
-			Movie movieFromDb = _db.Movies.Find(id);
-			if (movieFromDb == null)
-			{
-				return NotFound();
-			}
-			return View(movieFromDb);
-		}
-
-		[HttpPost, ActionName("Delete")]
-		public IActionResult DeletePOST(int? id)
-		{
-            Movie? obj = _db.Movies.Find(id); if (obj == null)
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
-			_db.Movies.Remove(obj);
-			_db.SaveChanges();
+
+            var movieFromDb = await _context.LoadAsync<Movie>(id);
+            if (movieFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(movieFromDb);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeletePOST(string id)
+        {
+            var obj = await _context.LoadAsync<Movie>(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            await _context.DeleteAsync(obj);
             TempData["success"] = "Movie deleted successfully!";
             return RedirectToAction("Index");
-		}
-	}
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _context.LoadAsync<Movie>(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View("Details", movie);
+        }
+    }
 }

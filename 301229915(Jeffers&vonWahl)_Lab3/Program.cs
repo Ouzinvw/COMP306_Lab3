@@ -1,3 +1,5 @@
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using HuluWeb.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,13 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connectionString); });
 builder.Services.AddDbContext<MovieDbContext>(options => { options.UseSqlServer(connectionString); });
+
+// Configuration for DynamoDB
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonDynamoDB>();
+builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
+
 
 var app = builder.Build();
 

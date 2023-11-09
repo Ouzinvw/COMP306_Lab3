@@ -1,0 +1,23 @@
+﻿@model Movie
+
+<div class="border p-3 mt-4">
+	<div class="row pb-2">
+		<h2 class="text-success">@Model.title</h2>
+		@*<img src="~/images/movies/@Model.ImageUrl" alt="@Model.title" class="movie-image">*@
+		<hr />
+	</div>
+	<div class="mb-3 row">
+		<p>Genre: @Model.genre</p>
+	</div>
+	<div class="mb-3 row">
+		<p>Director: @Model.director</p>
+	</div>
+	<div class="mb-3 row">
+		<p>Release Date: @Model.dateOfRelease</p>
+	</div>
+	<div class="row">
+		<div class="col-6 col-md-3">
+			<a asp-controller="Movie" asp-action="Index" class="btn btn-outline-dark border form-control">Back to movies</a>
+		</div>
+	</div>
+</div>

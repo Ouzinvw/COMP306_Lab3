@@ -4,11 +4,15 @@
 	ViewData["Title"] = "Create movie";
 }
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 	<div class="border p-3 mt-4">
 		<div class="row pb-2">
 			<h2 class="text-success">Create movie</h2>
 			<hr/>
+		</div>
+		<div class="mb-3 row">
+			<label>Movie cover image</label>
+			<input asp-for="imageUrl" type="file" name="ImageFile" class="form-control-file" accept="image/*" />
 		</div>
 		<div class="mb-3 row">
 			<label>Movie title</label>
