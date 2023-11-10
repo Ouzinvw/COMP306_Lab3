@@ -1,13 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Movies";
 }
-<partial name="_Notification" />
+
 <div class="container">
     <div class="row pt-4 pb-5">
         <div class="col-6">
-            <h2 class="text-success fw-bold">
-                Movies
-            </h2>
+            <h2 class="text-success fw-bold">Movies</h2>
         </div>
         <div class="col-6 text-end">
             <a asp-controller="Movie" asp-action="Create" class="btn btn-outline-success">
@@ -15,49 +13,79 @@
             </a>
         </div>
     </div>
-    <hr/>
-    </div>
-    <div class="text-center">
-        <div class="row">
-            <div class="table-responsive">
-                <table id="movieTable" class="table table-striped">
-                    <thead>
+    <hr />
+</div>
+<div class="text-center">
+    <div class="row">
+        <div class="table-responsive">
+            <table id="movieTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="#" onclick="sortMovies('title')">TITLE</a>
+                        </th>
+                        <th>
+                            <a href="#" onclick="sortMovies('genre')">GENRE</a>
+                        </th>
+                        <th>
+                            <a href="#" onclick="sortMovies('director')">DIRECTOR</a>
+                        </th>
+                        <th>
+                            <a href="#" onclick="sortMovies('dateOfRelease')">RELEASE DATE</a>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var movie in (List<Movie>)Model)
+                    {
                         <tr>
-                            <th>TITLE</th>
-                            <th>GENRE</th>
-                            <th>DIRECTOR</th>
-                            <th>RELEASE DATE</th>
-                            @*<th>RATING</th>*@
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var movie in ((List<Movie>)Model).OrderBy(m => m.genre))
-                        {
-                            <tr>
-                                <td>
-                                    <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.id" class="text-primary">
+                            <td>
+                                <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.id" class="text-primary">
                                     @movie.title
+                                </a>
+                            </td>
+                            <td>@movie.genre</td>
+                            <td>@movie.director</td>
+                            <td>@movie.dateOfRelease</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="Movie" asp-action="Edit" asp-route-id="@movie.id" class="btn btn-dark mx-2">
+                                        <i class="bi bi-pencil-fill"></i> Edit
                                     </a>
-                               </td>
-                                <td>@movie.genre</td>
-                                <td>@movie.director</td>
-                                <td>@movie.dateOfRelease</td>
-                                @*<td>RATING GOES HERE</td>*@
-                                <td>
-                                    <div class="w-75 btn-group" role="group">
-                                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@movie.id" class="btn btn-dark mx-2">
-                                            <i class="bi bi-pencil-fill"></i> Edit
-                                        </a>
                                     <a asp-controller="Movie" asp-action="Delete" asp-route-id="@movie.id" class="btn btn-outline-danger mx-2">
-                                            <i class="bi bi-trash-fill"></i> Delete
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
+
+<script>
+    function sortMovies(field) {
+        const movies = Array.from(document.querySelectorAll('#movieTable tbody tr'));
+        movies.sort((a, b) => {
+            let aValue = a.querySelector(`td:nth-child(${fieldIndex(field)})`).innerText.toLowerCase();
+            let bValue = b.querySelector(`td:nth-child(${fieldIndex(field)})`).innerText.toLowerCase();
+            return aValue.localeCompare(bValue);
+        });
+
+        const tbody = document.querySelector('#movieTable tbody');
+        movies.forEach(movie => tbody.appendChild(movie));
+    }
+
+    function fieldIndex(field) {
+        const fields = {
+            'title': 1,
+            'genre': 2,
+            'director': 3,
+            'dateOfRelease': 4
+        };
+        return fields[field];
+    }
+</script>

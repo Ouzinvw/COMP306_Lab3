@@ -12,23 +12,23 @@
 		</div>
 		<div class="mb-3 row">
 			<label>Movie cover image</label>
-			<input asp-for="imageUrl" type="file" name="ImageFile" class="form-control-file" accept="image/*" />
+			<input asp-for="imageUrl" type="file" name="ImageFile" class="form-control-file" accept="image/*" required />
 		</div>
 		<div class="mb-3 row">
 			<label>Movie title</label>
-			<input asp-for="title" class="form-control"/>
+			<input asp-for="title" class="form-control" required />
 		</div>
 		<div class="mb-3 row">
 			<label>Movie genre</label>
-			<input asp-for="genre" class="form-control" />
+			<input asp-for="genre" class="form-control" required />
 		</div>
 		<div class="mb-3 row">
 			<label>Movie director</label>
-			<input asp-for="director" class="form-control" />
+			<input asp-for="director" class="form-control" required />
 		</div>
 		<div class="mb-3 row">
 			<label>Date of release</label>
-			<input asp-for="dateOfRelease" class="form-control" />
+			<input asp-for="dateOfRelease" class="form-control" required />
 		</div>
 		<div class="row">
 			<div class="col-6 col-md-3">
