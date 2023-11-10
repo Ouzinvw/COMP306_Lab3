@@ -31,16 +31,17 @@
 
 <script>
 	function downloadImage() {
-		fetch("@Model.imageUrl")
+		fetch(`/Movie/DownloadS3Object?s3Url=@Model.imageUrl&fileName=${encodeURIComponent('@Model.title')}`)
 			.then(response => response.blob())
 			.then(blob => {
-				const url = window.URL.createObjectURL(blob);
+				const url = window.URL.createObjectURL(new Blob([blob]));
 				const link = document.createElement('a');
 				link.href = url;
-				link.download = "movie_image.jpg";
+				link.setAttribute('download', `${encodeURIComponent('@Model.title')}_poster.jpg`);
 				document.body.appendChild(link);
 				link.click();
-				document.body.removeChild(link);
 			});
 	}
 </script>
+
+

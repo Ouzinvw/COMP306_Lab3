@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 using HuluWeb.Models;
 using Amazon.S3.Transfer;
 using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace HuluWeb.Controllers
 {
     public class MovieController : Controller
     {
         private readonly IDynamoDBContext _context;
+		private readonly IHttpClientFactory _clientFactory;
 		private readonly IAmazonS3 _s3Client;
 
-		public MovieController(IAmazonDynamoDB dynamoDBClient, IAmazonS3 s3Client)
+		public MovieController(IAmazonDynamoDB dynamoDBClient, IAmazonS3 s3Client, IHttpClientFactory clientFactory)
         {
             _context = new DynamoDBContext(dynamoDBClient);
+			_clientFactory = clientFactory;
 			_s3Client = s3Client;
 
 		}
@@ -127,5 +130,21 @@ namespace HuluWeb.Controllers
 
             return View("Details", movie);
         }
-    }
+
+		public async Task<IActionResult> DownloadS3Object(string s3Url, string fileName)
+		{
+			var client = _clientFactory.CreateClient();
+			var response = await client.GetAsync(s3Url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stream = await response.Content.ReadAsStreamAsync();
+				return File(stream, "image/jpeg", $"{fileName}.jpg");
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
+	}
 }

@@ -22,7 +22,7 @@ builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
 
 // Configuration for S3
 builder.Services.AddAWSService<IAmazonS3>();
-
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
