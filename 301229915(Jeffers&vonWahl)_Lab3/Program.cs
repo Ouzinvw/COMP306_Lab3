@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.S3;
 using HuluWeb.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,9 @@ var awsOptions = builder.Configuration.GetAWSOptions();
 builder.Services.AddDefaultAWSOptions(awsOptions);
 builder.Services.AddAWSService<IAmazonDynamoDB>();
 builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
+
+// Configuration for S3
+builder.Services.AddAWSService<IAmazonS3>();
 
 
 var app = builder.Build();

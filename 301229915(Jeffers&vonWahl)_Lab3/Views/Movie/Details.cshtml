@@ -1,11 +1,15 @@
 ﻿@model Movie
 
+@{
+	ViewData["Title"] = Model.title;
+}
+
 <div class="border p-3 mt-4">
 	<div class="row pb-2">
 		<h2 class="text-success">@Model.title</h2>
-		@*<img src="~/images/movies/@Model.ImageUrl" alt="@Model.title" class="movie-image">*@
-		<hr />
+		<img class="movieImg" src="@Model.imageUrl" alt="Movie Image" width="200" height="300">
 	</div>
+	<hr />
 	<div class="mb-3 row">
 		<p>Genre: @Model.genre</p>
 	</div>
@@ -17,7 +21,26 @@
 	</div>
 	<div class="row">
 		<div class="col-6 col-md-3">
+			<button onclick="downloadImage()" type="button" class="btn btn-outline-success form-control">Download</button>
+		</div>
+		<div class="col-6 col-md-3">
 			<a asp-controller="Movie" asp-action="Index" class="btn btn-outline-dark border form-control">Back to movies</a>
 		</div>
 	</div>
 </div>
+
+<script>
+	function downloadImage() {
+		fetch("@Model.imageUrl")
+			.then(response => response.blob())
+			.then(blob => {
+				const url = window.URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.href = url;
+				link.download = "movie_image.jpg";
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			});
+	}
+</script>

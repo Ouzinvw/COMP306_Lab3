@@ -19,5 +19,24 @@ namespace HuluWeb.Models
         [DynamoDBProperty("dateOfRelease")]
         public string? dateOfRelease { get; set; }
         public string? imageUrl { get; set; }
-    }
+		//public List<Moviecomments>? comments { get; set; }
+	}
+	//public class Moviecomments
+	//{
+	//	public string comment { get; set; }
+	//	public string userID { get; set; }
+	//	public string userTitle { get; set; }
+	//	public string userDescription { get; set; }
+	//	public DateTime created { get; set; }
+	//	public DateTime updated { get; set; }
+	//	public string description { get; set; }
+	//	public string imageUrl { get; set; }
+	//	public string imageTitle { get; set; }
+	//	public string imageDescription { get; set; }
+	//	public string commenttime { get; set; }
+	//	public DateTime PublishedDate { get; set; }
+	//	public string commenturl { get; set; }
+	//	public bool Visible { get; set; }
+	//}
 }
+

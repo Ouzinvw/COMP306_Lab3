@@ -12,11 +12,14 @@ namespace HuluWeb.Controllers
     public class MovieController : Controller
     {
         private readonly IDynamoDBContext _context;
+		private readonly IAmazonS3 _s3Client;
 
-        public MovieController(IAmazonDynamoDB dynamoDBClient)
+		public MovieController(IAmazonDynamoDB dynamoDBClient, IAmazonS3 s3Client)
         {
             _context = new DynamoDBContext(dynamoDBClient);
-        }
+			_s3Client = s3Client;
+
+		}
 
         public async Task<IActionResult> Index()
         {
@@ -32,17 +35,18 @@ namespace HuluWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Movie obj, IFormFile ImageFile)
         {
-            
+
 			if (ImageFile != null && ImageFile.Length > 0)
 			{
 				var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
 
-				using (var client = new AmazonS3Client(YourAWSCredentials, YourS3Config))
-				using (var transferUtility = new TransferUtility(client))
+				using (var transferUtility = new TransferUtility(_s3Client))
+				using (var stream = ImageFile.OpenReadStream())
 				{
-					await transferUtility.UploadAsync(ImageFile.OpenReadStream(), YourBucketName, fileName);
+					await transferUtility.UploadAsync(stream, "comp303lab3", fileName);
 				}
-				obj.imageUrl = $"https://{YourBucketName}.s3.amazonaws.com/{fileName}";
+
+				obj.imageUrl = $"https://comp303lab3.s3.ca-central-1.amazonaws.com/{fileName}";
 			}
 
 			obj.id = System.Guid.NewGuid().ToString();
